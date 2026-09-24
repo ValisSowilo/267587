@@ -345,7 +345,7 @@ df2 = pd.DataFrame(columns=["Cells",
 			"p-value (resp-resp Y vs O)",
 			"Cohen's d (resp-resp Y vs O)"])
 
-df2 = df2.append({"Cells" : 'All',
+df2 = pd.concat([df2, pd.DataFrame([{"Cells" : 'All',
 			"Mean Base Young" : meanbaseratey,
 			"SD Base Young" : [lay0,lay0] if bsMeans else lowerbaseratey,
 			"Mean Response Young" : meanratey,
@@ -365,8 +365,7 @@ df2 = df2.append({"Cells" : 'All',
 			"Cohen's d (base-base Y vs O)" : cd2,
 			"t-stat (resp-resp Y vs O)" : tstat_S3,
 			"p-value (resp-resp Y vs O)" : pval_S3,
-			"Cohen's d (resp-resp Y vs O)" : cd3},
-			ignore_index = True)
+			"Cohen's d (resp-resp Y vs O)" : cd3}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 df2.to_csv('figs_tuning/stats_BaseVsResponseRates_'+str(totalstim)+'ms.csv')
 
@@ -418,7 +417,7 @@ uao = abs(meanactiveo-upperactiveo)
 tstat_S, pval_S = st.ttest_rel(PercentActivey,PercentActiveo)
 cd = cohen_d(PercentActivey,PercentActiveo)
 
-df = df.append({"Cells" : 'All',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'All',
 			"Metric" : '% Active',
 			"Mean Young" : meanactivey,
 			"SD Young" : [lay,lay] if bsMeans else loweractivey,
@@ -426,8 +425,7 @@ df = df.append({"Cells" : 'All',
 			"SD Old" : [lao,lao] if bsMeans else loweractiveo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [0,1]
 fig = plt.figure(figsize=(6,9))
@@ -456,7 +454,7 @@ uao = abs(meanrateo-upperrateo)
 tstat_S, pval_S = st.ttest_rel(MeanRatey,MeanRateo)
 cd = cohen_d(MeanRatey,MeanRateo)
 
-df = df.append({"Cells" : 'All',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'All',
 			"Metric" : 'Response Rate',
 			"Mean Young" : meanratey,
 			"SD Young" : [lay,lay] if bsMeans else lowerratey,
@@ -464,8 +462,7 @@ df = df.append({"Cells" : 'All',
 			"SD Old" : [lao,lao] if bsMeans else lowerrateo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [0,1]
 fig = plt.figure(figsize=(6,9))
@@ -495,7 +492,7 @@ uao = abs(meanSNRo-upperSNRo)
 tstat_S, pval_S = st.ttest_rel(SNRy,SNRo)
 cd = cohen_d(SNRy,SNRo)
 
-df = df.append({"Cells" : 'All',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'All',
 			"Metric" : 'SNR',
 			"Mean Young" : meanSNRy,
 			"SD Young" : [lay,lay] if bsMeans else lowerSNRy,
@@ -503,8 +500,7 @@ df = df.append({"Cells" : 'All',
 			"SD Old" : [lao,lao] if bsMeans else lowerSNRo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [-0.6,1.6]
 fig = plt.figure(figsize=(4,5))
@@ -534,7 +530,7 @@ uao = abs(meanCVo-upperCVo)
 tstat_S, pval_S = st.ttest_rel(RateCVy,RateCVo)
 cd = cohen_d(RateCVy,RateCVo)
 
-df = df.append({"Cells" : 'All',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'All',
 			"Metric" : 'Response Rate CV',
 			"Mean Young" : meanCVy,
 			"SD Young" : [lay,lay] if bsMeans else lowerCVy,
@@ -542,8 +538,7 @@ df = df.append({"Cells" : 'All',
 			"SD Old" : [lao,lao] if bsMeans else lowerCVo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [0,1]
 fig = plt.figure(figsize=(6,9))
@@ -675,7 +670,7 @@ uao = abs(meanactiveo-upperactiveo)
 tstat_S, pval_S = st.ttest_rel(PercentActivey,PercentActiveo)
 cd = cohen_d(PercentActivey,PercentActiveo)
 
-df = df.append({"Cells" : 'Stimulated',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'Stimulated',
 			"Metric" : '% Active',
 			"Mean Young" : meanactivey,
 			"SD Young" : [lay,lay] if bsMeans else loweractivey,
@@ -683,8 +678,7 @@ df = df.append({"Cells" : 'Stimulated',
 			"SD Old" : [lao,lao] if bsMeans else loweractiveo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [0,1]
 fig = plt.figure(figsize=(6,9))
@@ -713,7 +707,7 @@ uao = abs(meanrateo-upperrateo)
 tstat_S, pval_S = st.ttest_rel(MeanRatey,MeanRateo)
 cd = cohen_d(MeanRatey,MeanRateo)
 
-df = df.append({"Cells" : 'Stimulated',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'Stimulated',
 			"Metric" : 'Response Rate',
 			"Mean Young" : meanratey,
 			"SD Young" : [lay,lay] if bsMeans else lowerratey,
@@ -721,8 +715,7 @@ df = df.append({"Cells" : 'Stimulated',
 			"SD Old" : [lao,lao] if bsMeans else lowerrateo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [0,1]
 fig = plt.figure(figsize=(6,9))
@@ -752,7 +745,7 @@ uao = abs(meanSNRo-upperSNRo)
 tstat_S, pval_S = st.ttest_rel(SNRy,SNRo)
 cd = cohen_d(SNRy,SNRo)
 
-df = df.append({"Cells" : 'Stimulated',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'Stimulated',
 			"Metric" : 'SNR',
 			"Mean Young" : meanSNRy,
 			"SD Young" : [lay,lay] if bsMeans else lowerSNRy,
@@ -760,8 +753,7 @@ df = df.append({"Cells" : 'Stimulated',
 			"SD Old" : [lao,lao] if bsMeans else lowerSNRo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [0,1]
 fig = plt.figure(figsize=(6,9))
@@ -791,7 +783,7 @@ uao = abs(meanCVo-upperCVo)
 tstat_S, pval_S = st.ttest_rel(RateCVy,RateCVo)
 cd = cohen_d(RateCVy,RateCVo)
 
-df = df.append({"Cells" : 'Stimulated',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'Stimulated',
 			"Metric" : 'Response Rate CV',
 			"Mean Young" : meanCVy,
 			"SD Young" : [lay,lay] if bsMeans else lowerCVy,
@@ -799,8 +791,7 @@ df = df.append({"Cells" : 'Stimulated',
 			"SD Old" : [lao,lao] if bsMeans else lowerCVo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [0,1]
 fig = plt.figure(figsize=(6,9))
@@ -932,7 +923,7 @@ uao = abs(meanactiveo-upperactiveo)
 tstat_S, pval_S = st.ttest_rel(PercentActivey,PercentActiveo)
 cd = cohen_d(PercentActivey,PercentActiveo)
 
-df = df.append({"Cells" : 'Recurrent',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'Recurrent',
 			"Metric" : '% Active',
 			"Mean Young" : meanactivey,
 			"SD Young" : [lay,lay] if bsMeans else loweractivey,
@@ -940,8 +931,7 @@ df = df.append({"Cells" : 'Recurrent',
 			"SD Old" : [lao,lao] if bsMeans else loweractiveo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [0,1]
 fig = plt.figure(figsize=(6,9))
@@ -970,7 +960,7 @@ uao = abs(meanrateo-upperrateo)
 tstat_S, pval_S = st.ttest_rel(MeanRatey,MeanRateo)
 cd = cohen_d(MeanRatey,MeanRateo)
 
-df = df.append({"Cells" : 'Recurrent',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'Recurrent',
 			"Metric" : 'Response Rate',
 			"Mean Young" : meanratey,
 			"SD Young" : [lay,lay] if bsMeans else lowerratey,
@@ -978,8 +968,7 @@ df = df.append({"Cells" : 'Recurrent',
 			"SD Old" : [lao,lao] if bsMeans else lowerrateo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [0,1]
 fig = plt.figure(figsize=(6,9))
@@ -1009,7 +998,7 @@ uao = abs(meanSNRo-upperSNRo)
 tstat_S, pval_S = st.ttest_rel(SNRy,SNRo)
 cd = cohen_d(SNRy,SNRo)
 
-df = df.append({"Cells" : 'Recurrent',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'Recurrent',
 			"Metric" : 'SNR',
 			"Mean Young" : meanSNRy,
 			"SD Young" : [lay,lay] if bsMeans else lowerSNRy,
@@ -1017,8 +1006,7 @@ df = df.append({"Cells" : 'Recurrent',
 			"SD Old" : [lao,lao] if bsMeans else lowerSNRo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [0,1]
 fig = plt.figure(figsize=(6,9))
@@ -1049,7 +1037,7 @@ uao = abs(meanCVo-upperCVo)
 tstat_S, pval_S = st.ttest_rel(RateCVy,RateCVo)
 cd = cohen_d(RateCVy,RateCVo)
 
-df = df.append({"Cells" : 'Recurrent',
+df = pd.concat([df, pd.DataFrame([{"Cells" : 'Recurrent',
 			"Metric" : 'Response Rate CV',
 			"Mean Young" : meanCVy,
 			"SD Young" : [lay,lay] if bsMeans else lowerCVy,
@@ -1057,8 +1045,7 @@ df = df.append({"Cells" : 'Recurrent',
 			"SD Old" : [lao,lao] if bsMeans else lowerCVo,
 			"t-stat" : tstat_S,
 			"p-value" : pval_S,
-			"Cohen's d" : cd},
-			ignore_index = True)
+			"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 x = [0,1]
 fig = plt.figure(figsize=(6,9))
@@ -1223,7 +1210,7 @@ for y in y_values:
 
 fig, axarr = plt.subplots(nrows=1,ncols=1,figsize=(11,3.2))
 im = axarr.imshow(all_gfs,origin='lower',extent = [0 , N_HL5PN-1, 0 , 180], aspect='auto')
-axarr.set_ylabel('Angle ($^\circ$)')
+axarr.set_ylabel(r'Angle ($^\circ$)')
 axarr.set_xlabel('Neuron Index')
 axarr.set_xlim(0,N_HL5PN)
 axarr.set_xticks([0,100,200,300,400,500,600,700])

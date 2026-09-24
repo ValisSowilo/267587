@@ -57,7 +57,7 @@ sigmas = [0.47, 1.71, 0.02, 0.41] #conductivity
 L5_pos = np.array([0., 0., 77200.]) #single dipole refernece for EEG/ECoG
 EEG_sensor = np.array([[0., 0., 90000]])
 
-EEG_args = LFPy.FourSphereVolumeConductor(radii, sigmas, EEG_sensor)
+EEG_args = LFPy.FourSphereVolumeConductor(EEG_sensor, radii=radii, sigmas=sigmas) # LFPy >= 2.1 argument order
 
 sampling_rate = (1/0.025)*1000
 nperseg = 100000#int(sampling_rate/2)
@@ -409,7 +409,7 @@ def plot_eeg(network,DIPOLEMOMENT,low=.1,high=100.,order=2,stimtime=network.tsto
 	for pop in popnames[1:]:
 		DP = np.add(DP,DIPOLEMOMENT[pop])
 	
-	EEG = EEG_args.calc_potential(DP, L5_pos)
+	EEG = EEG_args.get_dipole_potential(DP.T, L5_pos) # LFPy >= 2.1 takes p with shape (3, n_timesteps)
 	EEG = EEG[0]
 	
 	EEG_filt = bandPassFilter(EEG[t1:t2],low,high,order)
@@ -446,7 +446,7 @@ def plot_eegFFT(network,DIPOLEMOMENT,low=.1,high=100.,order=2,stimtime=network.t
 	for pop in popnames[1:]:
 		DP = np.add(DP,DIPOLEMOMENT[pop])
 	
-	EEG = EEG_args.calc_potential(DP, L5_pos)
+	EEG = EEG_args.get_dipole_potential(DP.T, L5_pos) # LFPy >= 2.1 takes p with shape (3, n_timesteps)
 	EEG = EEG[0]
 	
 	EEG_filt = bandPassFilter(EEG[t1:t2],low,high,order)
@@ -611,9 +611,9 @@ def plot_syns(network,cellindices):
 				ax = fig.add_subplot(111,frameon=False)
 				for i, idx in enumerate(cell.synidx):
 					if cell.netconsynapses[i].e == -80: # if inhibitory
-						ax.plot(cell.ymid[idx], cell.zmid[idx], c='red', marker='.', markersize='15', alpha=0.3)
+						ax.plot(cell.y[idx].mean(), cell.z[idx].mean(), c='red', marker='.', markersize='15', alpha=0.3)
 					elif cell.netconsynapses[i].e == 0: # if excitatory
-						ax.plot(cell.ymid[idx], cell.zmid[idx], c='blue', marker='.', markersize='15', alpha=0.3)
+						ax.plot(cell.y[idx].mean(), cell.z[idx].mean(), c='blue', marker='.', markersize='15', alpha=0.3)
 				zips = []
 				xlist = []
 				zlist = []

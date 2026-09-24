@@ -13,7 +13,7 @@ from scipy import stats as st
 import neuron
 from neuron import h, gui
 import LFPy
-from LFPy import NetworkCell, Network, Synapse, RecExtElectrode, StimIntElectrode
+from LFPy import NetworkCell, Network, Synapse, RecExtElectrode, StimIntElectrode, CurrentDipoleMoment
 
 agegroup = 'o'
 
@@ -86,8 +86,6 @@ N_HL5MN = int(0.15*N_cells)
 N_HL5BN = int(0.10*N_cells)
 N_HL5VN = int(0.05*N_cells)
 
-cellnums = [N_HL5PN, N_HL5MN, N_HL5BN, N_HL5VN]
-
 if TESTING:
 	OUTPUTPATH = 'Circuit_output_testing'
 	N_HL5PN = 1
@@ -100,6 +98,8 @@ if TESTING:
 else:
 	OUTPUTPATH = 'Circuit_output'
 	print('Running full simulation...') if RANK==0 else None
+
+cellnums = [N_HL5PN, N_HL5MN, N_HL5BN, N_HL5VN] # set after TESTING so test runs use the reduced population sizes
 
 COMM.Barrier()
 
@@ -187,7 +187,7 @@ LFPelectrodeParameters = dict(
 	r=5.,
 	n=50,
 	sigma=0.3,
-	method="soma_as_point")
+	method="root_as_point") # see SomaAsPointElectrode below
 
 
 #method Network.simulate() parameters
@@ -199,13 +199,11 @@ simargs = {'rec_imem': False,
 		   'rec_isyn': False,
 		   'rec_vmemsyn': False,
 		   'rec_istim': False,
-		   'rec_current_dipole_moment': rec_DIPOLES,
-		   'rec_pop_contributions': False,
+		   'rec_pop_contributions': rec_DIPOLES, # per-population contributions, used for the per-population dipole moments
 		   'rec_variables': [],
 		   'to_memory': True,
 		   'to_file': False,
-		   'file_name':'OUTPUT.h5',
-		   'dotprodcoeffs': None}
+		   'file_name':'OUTPUT.h5'}
 
 #===========================================================================
 # Functions
@@ -256,6 +254,14 @@ def generateSubPop(popsize,mname,popargs,Gou,Gtonic,GtonicApic):
 		exec(biophys)
 		h.createArtificialSyn(rseed,network.populations[mname].cells[cellind].template,Gou)
 		h.addTonicInhibition(network.populations[mname].cells[cellind].template,Gtonic,GtonicApic)
+
+class SomaAsPointElectrode(RecExtElectrode):
+	# Reproduces LFPy 2.0's method='soma_as_point', where every soma segment is a point source.
+	# LFPy >= 2.1 renamed it 'root_as_point' but only treats segment 0 as the point source, which
+	# in a Network (all cells on a RANK merged into one cell) would be the first cell's soma only.
+	def get_transformation_matrix(self):
+		self.kwargs['rootinds'] = self.cell.get_idx('soma')
+		return super().get_transformation_matrix()
 
 def gaussian(x, mu, sig):
 	return np.exp(-np.power(x - mu, 2.) / (2 * np.power(sig, 2.)))
@@ -394,20 +400,40 @@ COMM.Barrier()
 # Run Simulation
 
 tic = time.perf_counter()
-LFPelectrode = RecExtElectrode(**LFPelectrodeParameters) if rec_LFP else None
+# LFPy >= 2.1: the LFP electrode and the current dipole moment are both "probes" whose
+# data is filled in by network.simulate(), which now only returns the spikes
+probes = []
+if rec_LFP:
+	LFPelectrode = SomaAsPointElectrode(cell=None, **LFPelectrodeParameters)
+	probes.append(LFPelectrode)
+if rec_DIPOLES:
+	DIPOLEprobe = CurrentDipoleMoment(cell=None)
+	probes.append(DIPOLEprobe)
 
 if rec_LFP and not rec_DIPOLES:
 	print('Simulating, recording SPIKES and LFP ... ') if RANK==0 else None
-	SPIKES, OUTPUT = network.simulate(electrode=LFPelectrode,**simargs)
 elif rec_LFP and rec_DIPOLES:
 	print('Simulating, recording SPIKES, LFP, and DIPOLEMOMENTS ... ') if RANK==0 else None
-	SPIKES, OUTPUT, DIPOLEMOMENT = network.simulate(electrode=LFPelectrode,**simargs)
 elif rec_DIPOLES and not rec_LFP:
 	print('Simulating, recording SPIKES DIPOLEMOMENTS ... ') if RANK==0 else None
-	SPIKES, DIPOLEMOMENT = network.simulate(**simargs)
 elif not rec_LFP and not rec_DIPOLES:
 	print('Simulating, recording SPIKES ... ') if RANK==0 else None
-	SPIKES = network.simulate(**simargs)
+SPIKES = network.simulate(probes=probes if probes else None, **simargs)
+
+# Repackage the probe data (summed across RANKs onto RANK 0) in the LFPy 2.0 output
+# format used by circuit_functions.py and the L5Circuit Analyses scripts:
+#   OUTPUT[0]['imem'] -> (n_contacts, n_timesteps) LFP in mV
+#   DIPOLEMOMENT[pop] -> (n_timesteps, 3) dipole moment per population in nA*um
+OUTPUT = None
+DIPOLEMOMENT = None
+if RANK==0:
+	if rec_LFP:
+		OUTPUT = np.zeros((1,) + LFPelectrode.data.shape, dtype=[('imem', float)])
+		OUTPUT[0]['imem'] = LFPelectrode.data['imem']
+	if rec_DIPOLES:
+		DIPOLEMOMENT = np.zeros(DIPOLEprobe.data.shape[::-1], dtype=[(name, float) for name in network.population_names])
+		for name in network.population_names:
+			DIPOLEMOMENT[name] = DIPOLEprobe.data[name].T
 
 print('Simulation took ', str((time.perf_counter() - tic_0)/60)[:5], 'minutes') if RANK==0 else None
 
@@ -425,7 +451,7 @@ if RANK==0:
 #===========================================================================
 # Plotting
 #===========================================================================
-if run_circuit_functions:
+if run_circuit_functions and not TESTING: # the plots assume the full-length simulation (2 s transient, stimulus at 6.5 s)
 
 	tstart_plot = 2000
 	tstop_plot = tstop

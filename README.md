@@ -25,3 +25,25 @@ Single Cell Optimizations and Simulations:
 All code associated with single cell optimizations is found in the /Single Cell Modelling/Optimizations directory. For usage of this code, we recommend starting from the README.md file and associated code in either the /L5Pyr_young_AltMorph_Scinet/ or /L5Pyr_old_AltMorph_Scinet/ directories.
 
 Analysis code of single cell optimization results can be found in the /Single Cell Modelling/Population Analysis/ folder. Current-step single-cell simulation code can be found in the /Single Cell Modelling/Current-Step Simulations/ folder. Code for simulating PSP summation of different connection types can be found in the /Single Cell Modelling/PSP Simulations/ folder.
+
+
+Running on NEURON 9 (updated 2026):
+The code has been updated to run on NEURON 9 with current Python packages (tested with Python 3.12, NEURON 9.0.2 and LFPy 2.3.7; see requirements_neuron9.txt). The original NEURON 7.7 / LFPy 2.0 environment is still described in lfpy_env.yml.
+
+pip install -r requirements_neuron9.txt
+cd L5Circuit/default_circuit/mod && nrnivmodl && cd ..
+mpiexec -n 400 python circuit.py 1234 1
+
+Changes made for NEURON 9 (model behaviour is unchanged):
+- Mod files (Gfluct.mod, ProbAMPANMDA(2).mod, ProbUDFsyn(2).mod): removed the "RANGE new_seed" line (new_seed is also a PROCEDURE, which NEURON 9 rejects) and two VERBATIM forward declarations of nrn_random_pick / nrn_random_arg that conflict with NEURON 9's own headers.
+- circuit.py (both circuits and PSP Simulations): LFPy 2.1+ records the LFP and the current dipole moment through "probes" (RecExtElectrode and CurrentDipoleMoment) instead of return values of Network.simulate(). The probe data is repackaged into the same OUTPUT and DIPOLEMOMENT formats as before, so the saved .npy files and the L5Circuit Analyses scripts are unchanged. LFPy 2.0's method="soma_as_point" is reproduced exactly by the SomaAsPointElectrode class (LFPy's newer "root_as_point" would only treat the first soma on each MPI rank as a point source).
+- circuit.py: cellnums is now set after the TESTING block, so TESTING = True runs with 1 cell per population instead of failing (the plots, which assume the full-length simulation, are skipped in test runs).
+- circuit_functions.py and L5Circuit Analyses: updated the four-sphere EEG calls to the LFPy 2.1+ interface (FourSphereVolumeConductor(electrode_positions, radii=..., sigmas=...).get_dipole_potential(p.T, location)).
+- Python package updates: np.trapz -> scipy.integrate.trapezoid, DataFrame.append -> pd.concat, cell.ymid/zmid -> cell.y/z, and the 'electrode' argument of Network.simulate() -> 'probes'.
+
+Validation: all 12 mod folders compile on NEURON 9.0.2. The single-cell F-I curves (L5Pyr_old and L5Pyr_young, step_current.hoc) are identical to the bundled simdata/HL5PN1_FI.txt. On the same NEURON version, the updated circuit code with LFPy 2.3.7 reproduces the original code with LFPy 2.0.7 exactly (identical spike times and dipole moments), apart from the one LFPy difference noted below.
+
+Differences from the original simulations for a given random seed:
+- NEURON 9 removed the old default generator of new Random(seed) (ACG), which net_functions.hoc uses to seed the Ornstein-Uhlenbeck background noise. The noise has the same statistics, but a given seed produces a different noise realization than on NEURON 7/8, so spike times for a given seed are not identical to the published runs.
+- LFPy 2.1+ draws the random connectivity with np.random.binomial instead of np.random.rand < p. The connection probabilities are unchanged, but a given circuit seed produces a different connection matrix than LFPy 2.0.
+Results should therefore be compared across seeds, as in the paper, rather than seed by seed.

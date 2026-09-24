@@ -118,12 +118,11 @@ nstat_PN2, npval_PN2 = st.normaltest(instarates2_PN)
 mwu_stat, mwu_pval = st.mannwhitneyu(instarates1_PN,instarates2_PN)
 
 df = pd.DataFrame(columns=["Comparison","Normal Test Young","Normal Test Old","MWU Stat","MWU P-Value"])
-df = df.append({"Comparison" : 'Pooled ISIs of Pyr Neurons Across Seeds',
+df = pd.concat([df, pd.DataFrame([{"Comparison" : 'Pooled ISIs of Pyr Neurons Across Seeds',
 			"Normal Test Young" : npval_PN1,
 			"Normal Test Old" : npval_PN2,
 			"MWU Stat" : mwu_stat,
-			"MWU P-Value" : mwu_pval},
-			ignore_index = True)
+			"MWU P-Value" : mwu_pval}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 numbins1 = int((np.max(instarates1_PN) - np.min(instarates1_PN))/bin_size_insta)
 numbins2 = int((np.max(instarates2_PN) - np.min(instarates2_PN))/bin_size_insta)
@@ -196,12 +195,11 @@ nstat_PN1, npval_PN1 = st.normaltest(ir1_m)
 nstat_PN2, npval_PN2 = st.normaltest(ir2_m)
 mwu_stat, mwu_pval = st.mannwhitneyu(ir1_m,ir2_m)
 
-df = df.append({"Comparison" : 'Mean Pyr Neuron ISI Distributions',
+df = pd.concat([df, pd.DataFrame([{"Comparison" : 'Mean Pyr Neuron ISI Distributions',
 			"Normal Test Young" : npval_PN1,
 			"Normal Test Old" : npval_PN2,
 			"MWU Stat" : mwu_stat,
-			"MWU P-Value" : mwu_pval},
-			ignore_index = True)
+			"MWU P-Value" : mwu_pval}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 df.to_csv('figs_RateDistributions/stats_MannWhitneyUTest_Rates.csv')
 
 binsvec = np.linspace(0,max_insta, num=int(max_insta/bin_size_insta))

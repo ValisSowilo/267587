@@ -8,6 +8,7 @@ import sys
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.integrate import trapezoid # np.trapz was removed in numpy 2
 np.seterr(divide='ignore', invalid='ignore')
 import scipy
 import scipy.fftpack
@@ -107,7 +108,7 @@ for control in controlm:
 				integ = ss.convolve(spikebinvec_PN,psp_AMPANMDA,method='fft')
 				integ = integ[0:len(tvec)]
 				# integ_allseeds[idx].append(integ)
-				integ_area = np.trapz(integ,x=tvec)
+				integ_area = trapezoid(integ,x=tvec)
 				integ_area_allseeds[idx].append(integ_area)
 				integ_max = np.max(integ)
 				integ_max_allseeds[idx].append(integ_max)

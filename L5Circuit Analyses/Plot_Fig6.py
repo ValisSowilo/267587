@@ -427,7 +427,7 @@ for controi in controli:
 	snr_pval.append(pval_S)
 	snr_cd.append(cd)
 	
-	df = df.append({"Cells" : 'All',
+	df = pd.concat([df, pd.DataFrame([{"Cells" : 'All',
 				"Stim Loc" : controi,
 				"Metric" : 'SNR',
 				"Mean Young" : meanSNRy,
@@ -436,8 +436,7 @@ for controi in controli:
 				"SD Old" : [lao,lao] if bsMeans else lowerSNRo,
 				"t-stat" : tstat_S,
 				"p-value" : pval_S,
-				"Cohen's d" : cd},
-				ignore_index = True)
+				"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 	
 	lay0 = abs(meanbaseratey-lowerbaseratey)
 	uay0 = abs(meanbaseratey-upperbaseratey)
@@ -454,7 +453,7 @@ for controi in controli:
 	cd2 = cohen_d(MeanBaseRatey,MeanBaseRateo)
 	cd3 = cohen_d(MeanRatey,MeanRateo)
 	
-	df2 = df2.append({"Cells" : 'All',
+	df2 = pd.concat([df2, pd.DataFrame([{"Cells" : 'All',
 				"Stim Loc" : controi,
 				"Mean Base Young" : meanbaseratey,
 				"SD Base Young" : [lay0,lay0] if bsMeans else lowerbaseratey,
@@ -475,8 +474,7 @@ for controi in controli:
 				"Cohen's d (base-base Y vs O)" : cd2,
 				"t-stat (resp-resp Y vs O)" : tstat_S3,
 				"p-value (resp-resp Y vs O)" : pval_S3,
-				"Cohen's d (resp-resp Y vs O)" : cd3},
-				ignore_index = True)
+				"Cohen's d (resp-resp Y vs O)" : cd3}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 	
 	rr_m.append([meanratey,meanrateo])
 	rr_sd.append([[lay,lao],[uay,uao]] if bsMeans else [lowerratey,lowerrateo])

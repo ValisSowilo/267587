@@ -42,7 +42,7 @@ sigmas = [0.47, 1.71, 0.02, 0.41] #conductivity
 L5_pos = np.array([0., 0., 78200.]) #single dipole refernece for EEG/ECoG
 EEG_sensor = np.array([[0., 0., 90000]])
 
-EEG_args = LFPy.FourSphereVolumeConductor(radii, sigmas, EEG_sensor)
+EEG_args = LFPy.FourSphereVolumeConductor(EEG_sensor, radii=radii, sigmas=sigmas) # LFPy >= 2.1 argument order
 
 manipulation = 'Old'
 condition = 'dend'
@@ -217,13 +217,13 @@ for i in N_seedsList:
 	temp_ec22 = np.add(temp_ec22,temp_ec02['HL5BN1'])
 	temp_ec22 = np.add(temp_ec22,temp_ec02['HL5VN1'])
 	
-	potentialn = EEG_args.calc_potential(temp_en2, L5_pos)
+	potentialn = EEG_args.get_dipole_potential(temp_en2.T, L5_pos)
 	EEGn = potentialn[0][t1:t2]
-	potentialc = EEG_args.calc_potential(temp_ec2, L5_pos)
+	potentialc = EEG_args.get_dipole_potential(temp_ec2.T, L5_pos)
 	EEGc = potentialc[0][t1:t2]
-	potentialc1 = EEG_args.calc_potential(temp_ec21, L5_pos)
+	potentialc1 = EEG_args.get_dipole_potential(temp_ec21.T, L5_pos)
 	EEGc1 = potentialc1[0][t1:t2]
-	potentialc2 = EEG_args.calc_potential(temp_ec22, L5_pos)
+	potentialc2 = EEG_args.get_dipole_potential(temp_ec22.T, L5_pos)
 	EEGc2 = potentialc2[0][t1:t2]
 	
 	freqrawEEGn, psrawEEGn = ss.welch(EEGn, 1/(dt/1000), nperseg=40000)
@@ -379,7 +379,7 @@ cd = cohen_d(nrSE[0],ncSE[0])
 cd1 = cohen_d(nrSE[0],ncSE1[0])
 cd2 = cohen_d(nrSE[0],ncSE2[0])
 
-df = df.append({"Mean Young" : meanRatesnSE[0],
+df = pd.concat([df, pd.DataFrame([{"Mean Young" : meanRatesnSE[0],
 			"SD Young" : stdevRatesnSE[0],
 			"Mean Old" : meanRatescSE[0],
 			"SD Old" : stdevRatescSE[0],
@@ -395,8 +395,7 @@ df = df.append({"Mean Young" : meanRatesnSE[0],
 			"Cohen's d (Y vs O+Ydend)" : cd1,
 			"t-stat (Y vs O+YH)" : tstat_PNSE2,
 			"p-value (Y vs O+YH)" : pval_PNSE2,
-			"Cohen's d (Y vs O+YH)" : cd2},
-			ignore_index = True)
+			"Cohen's d (Y vs O+YH)" : cd2}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 
 df.to_csv('figs_alltests/stats_baseline_AllConditions.csv')
 

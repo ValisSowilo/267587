@@ -6,6 +6,7 @@ from matplotlib.collections import PolyCollection
 import numpy as np
 import scipy
 from scipy import stats as st
+from scipy.integrate import trapezoid # np.trapz was removed in numpy 2
 from mpi4py import MPI
 import neuron
 from neuron import *
@@ -196,7 +197,7 @@ for aidx, agegroup in enumerate(agegroups):
 		
 		OUTPUTPATH = 'Circuit_output/test_syn_results'
 		if not os.path.isdir(OUTPUTPATH):
-			os.mkdir(OUTPUTPATH)
+			os.makedirs(OUTPUTPATH) # also creates Circuit_output/
 			print('Created ', OUTPUTPATH)
 		
 		#somatic potentials
@@ -466,7 +467,7 @@ for aidx, agegroup in enumerate(agegroups):
 							'delay': 0}
 						post_stimuli = LFPy.StimIntElectrode(cell, **pointprocess)
 			
-			simargs = {'electrode': None,
+			simargs = {'probes': None, # LFPy >= 2.1 name for the old 'electrode' argument
 					   'rec_imem': False,
 					   'rec_vmem': False,
 					   'rec_ipas': False,
@@ -597,9 +598,9 @@ for aidx, agegroup in enumerate(agegroups):
 						if ((name==new_cellnames[1]) & (agegroup=='o')):
 							for cell in pop.cells:
 								for i, idx in enumerate(cell.synidx):
-									ax[pidx].plot(cell.ymid[idx], cell.zmid[idx], c=col3, marker='.', markersize='15')
+									ax[pidx].plot(cell.y[idx].mean(), cell.z[idx].mean(), c=col3, marker='.', markersize='15')
 								for i, idx in enumerate(np.concatenate(post_synlist).tolist()):
-									ax[pidx].plot(cell.ymid[idx], cell.zmid[idx], c=col3, marker='.', markersize='15', alpha=0.1)
+									ax[pidx].plot(cell.y[idx].mean(), cell.z[idx].mean(), c=col3, marker='.', markersize='15', alpha=0.1)
 								zips = []
 								for x, z in cell.get_pt3d_polygons(projection=('y', 'z')):
 									zips.append(list(zip(x, z)))
@@ -641,7 +642,7 @@ for aidx, agegroup in enumerate(agegroups):
 					post_somav_sd_train = np.std(post_somav_train,axis=0)
 				post_somav_m_RMP = np.mean(post_somav_m_train[t1_rest:t2_rest])
 				
-				post_somav_areas[pidx][aidx] = [np.trapz(np.abs(p[t1:t2]-post_somav_m_RMP),x=tvec[t1:t2]) for p in post_somav_train]
+				post_somav_areas[pidx][aidx] = [trapezoid(np.abs(p[t1:t2]-post_somav_m_RMP),x=tvec[t1:t2]) for p in post_somav_train]
 				post_somav_amplitude[pidx][aidx] = [np.max(np.abs(p[t1:t2]-post_somav_m_RMP)) for p in post_somav_train]
 				post_somav_mconnection_traces[pidx][aidx] = [p[t1:t2]-post_somav_m_RMP for p in post_somav_train]
 				
@@ -880,7 +881,7 @@ for i in range(0,len(post_somav_amplitude)):
 	mwu_stat2, mwu_pval2 = st.mannwhitneyu(post_somav_amplitude[i][0],post_somav_amplitude[i][1])
 	cd2 = cohen_d(post_somav_amplitude[i][0],post_somav_amplitude[i][1])
 	
-	df = df.append({"Connection" : preNs[i]+postN,
+	df = pd.concat([df, pd.DataFrame([{"Connection" : preNs[i]+postN,
 				"Metric" : 'PSP Amplitude',
 				"Mean Young" : m_y2,
 				"SD Young" : sd_y2,
@@ -892,8 +893,7 @@ for i in range(0,len(post_somav_amplitude)):
 				"t-test p-value" : pval2,
 				"MWU stat" : mwu_stat2,
 				"MWU p-value" : mwu_pval2,
-				"Cohen's d" : cd2},
-				ignore_index = True)
+				"Cohen's d" : cd2}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 	
 	x = [-0.2, 1.2]
 	c1 = 'dimgray'
@@ -940,7 +940,7 @@ for i in range(0,len(post_somav_areas)):
 	mwu_stat, mwu_pval = st.mannwhitneyu(post_somav_areas[i][0],post_somav_areas[i][1])
 	cd = cohen_d(post_somav_areas[i][0],post_somav_areas[i][1])
 	
-	df = df.append({"Connection" : preNs[i]+postN,
+	df = pd.concat([df, pd.DataFrame([{"Connection" : preNs[i]+postN,
 				"Metric" : 'Area Under PSP',
 				"Mean Young" : m_y,
 				"SD Young" : sd_y,
@@ -952,8 +952,7 @@ for i in range(0,len(post_somav_areas)):
 				"t-test p-value" : pval,
 				"MWU stat" : mwu_stat,
 				"MWU p-value" : mwu_pval,
-				"Cohen's d" : cd},
-				ignore_index = True)
+				"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 	
 	x = [-0.2, 1.2]
 	c1 = 'dimgray'

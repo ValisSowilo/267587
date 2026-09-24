@@ -46,7 +46,7 @@ sigmas = [0.47, 1.71, 0.02, 0.41] #conductivity
 L5_pos = np.array([0., 0., 78200.]) #single dipole refernece for EEG/ECoG
 EEG_sensor = np.array([[0., 0., 90000]])
 
-EEG_args = LFPy.FourSphereVolumeConductor(radii, sigmas, EEG_sensor)
+EEG_args = LFPy.FourSphereVolumeConductor(EEG_sensor, radii=radii, sigmas=sigmas) # LFPy >= 2.1 argument order
 
 manipulation = 'Old'
 condition = 'dend'
@@ -303,9 +303,9 @@ for i in N_seedsList:
 	temp_ec2 = np.add(temp_ec2,temp_ec['HL5BN1'])
 	temp_ec2 = np.add(temp_ec2,temp_ec['HL5VN1'])
 	
-	potentialn = EEG_args.calc_potential(temp_en2, L5_pos)
+	potentialn = EEG_args.get_dipole_potential(temp_en2.T, L5_pos)
 	EEGn = potentialn[0][t1:t2]
-	potentialc = EEG_args.calc_potential(temp_ec2, L5_pos)
+	potentialc = EEG_args.get_dipole_potential(temp_ec2.T, L5_pos)
 	EEGc = potentialc[0][t1:t2]
 	
 	nperseg = len(tvec[t1:t2])/2

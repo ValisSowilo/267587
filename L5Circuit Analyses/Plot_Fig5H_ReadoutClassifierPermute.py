@@ -307,7 +307,7 @@ for name,dict_ in errors['y'].items():
 	tstat, pval = st.ttest_ind(errors['y'][name]['bsl'],errors['o'][name]['bsl'])
 	cd = cohen_d(errors['y'][name]['bsl'],errors['o'][name]['bsl'])
 	
-	df = df.append({"Metric" : 'Brier Score Loss',
+	df = pd.concat([df, pd.DataFrame([{"Metric" : 'Brier Score Loss',
 				"Classifier" : name,
 				"Mean Young" : mean_y,
 				"SD Young" : sd_y,
@@ -317,8 +317,7 @@ for name,dict_ in errors['y'].items():
 				"95% CI Old" : CI95_o,
 				"t-stat" : tstat,
 				"p-value" : pval,
-				"Cohen's d" : cd},
-				ignore_index = True)
+				"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 	
 	yerry = [[abs(mean_y-CI95_y[0])],[abs(mean_y-CI95_y[1])]]
 	yerro = [[abs(mean_o-CI95_o[0])],[abs(mean_o-CI95_o[1])]]
@@ -366,7 +365,7 @@ for name,dict_ in errors['y'].items():
 	tstat, pval = st.ttest_ind(errors['y'][name]['as'],errors['o'][name]['as'])
 	cd = cohen_d(errors['y'][name]['as'],errors['o'][name]['as'])
 	
-	df = df.append({"Metric" : 'Accuracy Score',
+	df = pd.concat([df, pd.DataFrame([{"Metric" : 'Accuracy Score',
 				"Classifier" : name,
 				"Mean Young" : mean_y,
 				"SD Young" : sd_y,
@@ -376,8 +375,7 @@ for name,dict_ in errors['y'].items():
 				"95% CI Old" : CI95_o,
 				"t-stat" : tstat,
 				"p-value" : pval,
-				"Cohen's d" : cd},
-				ignore_index = True)
+				"Cohen's d" : cd}])], ignore_index=True) # DataFrame.append was removed in pandas 2
 	
 	yerry = [[abs(mean_y-CI95_y[0])],[abs(mean_y-CI95_y[1])]]
 	yerro = [[abs(mean_o-CI95_o[0])],[abs(mean_o-CI95_o[1])]]

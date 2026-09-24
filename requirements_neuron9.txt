@@ -1,0 +1,20 @@
+# Python packages for running this model on NEURON 9 (tested September 2026 with
+# Python 3.12 on Debian 12, Open MPI 4.1). The original environment for NEURON 7.7 /
+# LFPy 2.0 is described in lfpy_env.yml.
+#
+#   pip install -r requirements_neuron9.txt
+#
+# mpi4py needs an MPI installation (e.g. apt install libopenmpi-dev openmpi-bin), and
+# compiling the mod files needs a C++ compiler.
+neuron==9.0.2
+LFPy==2.3.7
+mpi4py==4.1.2
+numpy==2.5.3
+scipy==1.18.1
+pandas==3.0.6
+tables==3.11.1
+h5py==3.16.0
+matplotlib==3.11.2
+seaborn==0.13.2
+scikit-learn==1.9.1
+bootstrapped==0.0.2
