@@ -1,3 +1,4 @@
+# Modified 2026-09-24 by Valis Sowilo (github.com/ValisSowilo): updated for NEURON 9, LFPy 2.3, numpy 2 and pandas 2+. See CHANGES_NEURON9.md.
 #===========================================================================
 # Import, Set up MPI Variables, Load Necessary Files
 #===========================================================================

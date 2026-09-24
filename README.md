@@ -28,6 +28,8 @@ Analysis code of single cell optimization results can be found in the /Single Ce
 
 
 Running on NEURON 9 (updated 2026):
+NEURON 9 port by Valis Sowilo (github.com/ValisSowilo), September 2026. See CHANGES_NEURON9.md for the full list of changes and how they were validated.
+
 The code has been updated to run on NEURON 9 with current Python packages (tested with Python 3.12, NEURON 9.0.2 and LFPy 2.3.7; see requirements_neuron9.txt). The original NEURON 7.7 / LFPy 2.0 environment is still described in lfpy_env.yml.
 
 pip install -r requirements_neuron9.txt

@@ -1,3 +1,5 @@
+: Modified 2026-09-24 by Valis Sowilo (github.com/ValisSowilo): removed the duplicate 'RANGE new_seed' and stale VERBATIM nrn_random declarations so this file compiles on NEURON 9. See CHANGES_NEURON9.md.
+
 TITLE Fluctuating conductances
 
 COMMENT
