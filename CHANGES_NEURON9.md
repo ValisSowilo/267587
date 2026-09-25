@@ -31,6 +31,11 @@ circuit_functions.py and L5Circuit Analyses
 PSP Simulations/test_syn_Fig7.py
 - Network.simulate(electrode=) -> probes=; cell.ymid/zmid -> cell.y/z; np.trapz and DataFrame.append
   as above; the output folder is created if Circuit_output/ does not exist.
+- The presynaptic spike times are copied when they are stored. LFPy 2.1+ returns spike times as
+  views of NEURON vectors (LFPy 2.0 returned copies), and the script keeps them across the 20
+  trials and the deletion of each network, so spikelist_pre_train.npy was saved with overwritten
+  values (zeros, NaN, negative times) on Linux and the script crashed on Windows (access
+  violation). With the copy, the file matches the original code on NEURON 8.2 / LFPy 2.0.7.
 
 Population Analysis AnalyzeResults_FigS4top.py / AnalyzeResults_FigS4bottom.py
 - set_xticks([a, b]) with one-element arrays -> set_xticks(numpy.ravel([a, b])): current matplotlib

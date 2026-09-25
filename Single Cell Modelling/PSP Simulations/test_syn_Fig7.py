@@ -511,7 +511,9 @@ for aidx, agegroup in enumerate(agegroups):
 					if name==new_cellnames[0]:
 						for cell in pop.cells:
 							pre_somav_train.append(cell.somav)
-							spikelist_pre_train.append(SPIKES['times'][0])
+							# copy: LFPy 2.1+ returns spike times as views of NEURON vectors, which the next trial and
+							# the deletion of the network overwrite or free (LFPy 2.0 returned copies)
+							spikelist_pre_train.append([np.array(x) for x in SPIKES['times'][0]])
 					if name==new_cellnames[1]:
 						for cell in pop.cells:
 							pst.append(np.array(cell.somav))
