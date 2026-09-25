@@ -36,7 +36,7 @@ pip install -r requirements_neuron9.txt
 cd L5Circuit/default_circuit/mod && nrnivmodl && cd ..
 mpiexec -n 400 python circuit.py 1234 1
 
-On Windows, install NEURON 9.0.2 with its installer and Microsoft MPI first, then follow the steps at the top of requirements_neuron9_windows.txt (PyPI has no NEURON package for Windows, so LFPy is installed with --no-deps). The single-cell optimization and population analysis code also needs requirements_neuron9_singlecell.txt.
+On Windows, install NEURON 9.0.2 with its installer and Microsoft MPI first, then follow the steps at the top of requirements_neuron9_windows.txt (PyPI has no NEURON package for Windows, so LFPy is installed with --no-deps). Before running nrnivmodl on Windows, set MAKEFLAGS=EXTRA_FLAGS=-O2: NEURON 9.0.2 compiles the mod files without optimization on Windows, which made simulations up to about 4 times slower. The single-cell optimization and population analysis code also needs requirements_neuron9_singlecell.txt.
 
 Changes made for NEURON 9 (model behaviour is unchanged):
 - Mod files (Gfluct.mod, ProbAMPANMDA(2).mod, ProbUDFsyn(2).mod): removed the "RANGE new_seed" line (new_seed is also a PROCEDURE, which NEURON 9 rejects) and two VERBATIM forward declarations of nrn_random_pick / nrn_random_arg that conflict with NEURON 9's own headers.

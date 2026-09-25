@@ -10,8 +10,12 @@
 #        pip install -r requirements_neuron9_windows.txt
 #        pip install --no-deps LFPy==2.3.7
 #
-# Compile the mod files with nrnivmodl (it creates nrnmech.dll) and run the circuit with
-# mpiexec -n <ranks> python circuit.py <seed> 1
+# Compile the mod files with nrnivmodl (it creates nrnmech.dll). NEURON 9.0.2's nrnivmodl on
+# Windows compiles without optimization, which made the PSP simulations about 4 times slower,
+# so turn it on first (Command Prompt; in PowerShell use $env:MAKEFLAGS = "EXTRA_FLAGS=-O2"):
+#   set MAKEFLAGS=EXTRA_FLAGS=-O2
+#   nrnivmodl
+# Then run the circuit with mpiexec -n <ranks> python circuit.py <seed> 1
 LFPykit==0.6.2
 MEAutility==1.5.3
 Cython==3.3.0

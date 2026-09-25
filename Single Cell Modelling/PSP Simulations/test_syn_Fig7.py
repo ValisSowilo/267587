@@ -424,15 +424,16 @@ for aidx, agegroup in enumerate(agegroups):
 				syndists.append(h.distance(locx))
 				
 				# Replicates LFPy's method but with control over seeds
-				rseed = local_state.randint(0,2**32 - 1)
+				# (dtype=np.int64: the default is 32-bit on Windows, too small for 2**32 - 1; same numbers as on Linux)
+				rseed = local_state.randint(0,2**32 - 1,dtype=np.int64)
 				rng = neuron.h.Random(rseed)
 				rng.MCellRan4(
 					local_state.randint(
 						0,
-						2**32 - 1),
+						2**32 - 1,dtype=np.int64),
 					local_state.randint(
 						0,
-						2**32 - 1))
+						2**32 - 1,dtype=np.int64))
 				rng.uniform(0, 1)
 				network.populations[postc].cells[0].netconsynapses[l].setRNG(rng)
 				network.populations[postc].cells[0].rng_list[l] = rng

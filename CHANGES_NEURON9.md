@@ -55,12 +55,17 @@ Windows
   now make np.random.randint default to 64-bit integers, as on Linux and macOS. This also makes the
   random numbers the same as on Linux, so a seed gives the same connectivity (and, in the
   heterogeneous circuit, the same choice of cell models) on every system.
+  test_syn_Fig7.py also draws its own synapse seeds with randint(0, 2**32 - 1); these calls now
+  pass dtype=np.int64 (on Linux this gives the same numbers as before).
 - Single-cell scripts (Optimizations init_8plot.py, out_1SimulateModel.py and NSG/PV init_active.py;
   Population Analysis SimulateModel.py): BluePyOpt runs each protocol in a separate process by
   default. Windows starts such processes by re-running the main script, which fails for these
   scripts (RuntimeError), so on Windows the protocols now run in-process
   (protocol.run(..., isolate=sys.platform != 'win32')). On Linux and macOS nothing changes. The
   optimization itself (evaluations on the ipyparallel engines) was not affected.
+- Speed: NEURON 9.0.2's nrnivmodl on Windows compiles the mod files without optimization (no -O
+  flag); the PSP simulations ran about 4 times slower than with -O2. The Windows instructions now
+  set MAKEFLAGS=EXTRA_FLAGS=-O2 before nrnivmodl. (No code change.)
 - The "Mechanisms found" message also recognizes mod/nrnmech.dll (Windows) and mod/arm64/special
   (Apple silicon), instead of printing False there.
 
