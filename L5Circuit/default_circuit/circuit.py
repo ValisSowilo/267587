@@ -390,6 +390,13 @@ for i, pre in enumerate(network.population_names):
 
 print('Connecting populations took ', str((time.perf_counter() - tic_0)/60)[:5], 'minutes') if RANK==0 else None
 
+# NEURON 9 aborts in nrn_calc_fast_imem ("Assertion `vec_sav_d' failed") on an MPI rank that owns
+# no sections, which happens when there are more ranks than cells (e.g. TESTING with > 4 ranks).
+# An unconnected placeholder section on such ranks avoids this; it belongs to no population, so it
+# is not part of the recorded spikes, LFP or dipoles. Ranks that own cells are unaffected.
+if sum(len(pop.cells) for pop in network.populations.values()) == 0:
+	empty_rank_section = h.Section(name='empty_rank_section')
+
 # Setup Extracellular Recording Device
 COMM.Barrier()
 if stimulate:

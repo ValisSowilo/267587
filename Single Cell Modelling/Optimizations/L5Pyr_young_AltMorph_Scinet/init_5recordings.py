@@ -1,9 +1,10 @@
+# Modified 2026-09-24 by Valis Sowilo (github.com/ValisSowilo): updated for NEURON 9, LFPy 2.3, numpy 2 and pandas 2+. See CHANGES_NEURON9.md.
 ################################
 ### Setup Recording Protocol ###
 ################################
 h.tstop = 2000
 h.dt = 0.025
-stepnames = ['step'+str(l) for l in numpy.linspace(1,len(c_soma),len(c_soma),dtype=numpy.int)]
+stepnames = ['step'+str(l) for l in numpy.linspace(1,len(c_soma),len(c_soma),dtype=int)]
 zipsteps = zip(stepnames,c_soma)
 
 ######### Choose Recording Sites #########

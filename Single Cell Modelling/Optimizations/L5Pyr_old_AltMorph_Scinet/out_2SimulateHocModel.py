@@ -1,3 +1,4 @@
+# Modified 2026-09-24 by Valis Sowilo (github.com/ValisSowilo): fixed a bug in the original code (see CHANGES_NEURON9.md).
 # Simple example of how to load the exported hoc model into NEURON + sanity check
 import time
 import numpy
@@ -13,7 +14,8 @@ pp.pprint("Initializing...")
 sys.stdout.flush()
 
 idx = 0 # Index of model used (same as in 'out_1SimulateModel.py')
-cellname = 'interneuron'# Name of template - first specified in 'init_1morphology.py'
+import re
+cellname = re.search(r"^cellname = '(\w+)'", open('init_1morphology.py').read(), re.M).group(1) # Name of template - read from 'init_1morphology.py' so the two always match
 
 h.load_file('work/template' + str(idx) + '.hoc')
 h('objref NeuronModel')

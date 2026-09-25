@@ -36,6 +36,8 @@ pip install -r requirements_neuron9.txt
 cd L5Circuit/default_circuit/mod && nrnivmodl && cd ..
 mpiexec -n 400 python circuit.py 1234 1
 
+On Windows, install NEURON 9.0.2 with its installer and Microsoft MPI first, then follow the steps at the top of requirements_neuron9_windows.txt (PyPI has no NEURON package for Windows, so LFPy is installed with --no-deps). The single-cell optimization and population analysis code also needs requirements_neuron9_singlecell.txt.
+
 Changes made for NEURON 9 (model behaviour is unchanged):
 - Mod files (Gfluct.mod, ProbAMPANMDA(2).mod, ProbUDFsyn(2).mod): removed the "RANGE new_seed" line (new_seed is also a PROCEDURE, which NEURON 9 rejects) and two VERBATIM forward declarations of nrn_random_pick / nrn_random_arg that conflict with NEURON 9's own headers.
 - circuit.py (both circuits and PSP Simulations): LFPy 2.1+ records the LFP and the current dipole moment through "probes" (RecExtElectrode and CurrentDipoleMoment) instead of return values of Network.simulate(). The probe data is repackaged into the same OUTPUT and DIPOLEMOMENT formats as before, so the saved .npy files and the L5Circuit Analyses scripts are unchanged. LFPy 2.0's method="soma_as_point" is reproduced exactly by the SomaAsPointElectrode class (LFPy's newer "root_as_point" would only treat the first soma on each MPI rank as a point source).

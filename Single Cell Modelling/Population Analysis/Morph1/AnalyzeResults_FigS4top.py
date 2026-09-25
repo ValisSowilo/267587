@@ -1,3 +1,4 @@
+# Modified 2026-09-24 by Valis Sowilo (github.com/ValisSowilo): updated for current matplotlib and fixed a bug in the original code. See CHANGES_NEURON9.md.
 import numpy
 import pickle
 import matplotlib
@@ -434,8 +435,8 @@ for i2 in range(0,len(halloffamey.__dict__['items'])):
 	yrmp = abs(halloffamey.__dict__['items'][i2].__dict__['fitness'].__dict__['wvalues'][rmpidx]/2)
 	osag = abs(halloffameo.__dict__['items'][i2].__dict__['fitness'].__dict__['wvalues'][sagidx]/10)
 	ormp = abs(halloffameo.__dict__['items'][i2].__dict__['fitness'].__dict__['wvalues'][rmpidx]/2)
-	text1 = ax.text(yrmp,ysag,str(i2+1),color='white',horizontalalignment='center',verticalalignment='center',fontsize=20)
-	text2 = ax.text(ormp,osag,str(i2+1),color='mistyrose',horizontalalignment='center',verticalalignment='center',fontsize=20)
+	text1 = ax.text(yrmp,ysag,str(i2+1),color='white',horizontalalignment='center',verticalalignment='center',fontsize=20,clip_on=True)
+	text2 = ax.text(ormp,osag,str(i2+1),color='mistyrose',horizontalalignment='center',verticalalignment='center',fontsize=20,clip_on=True)
 	text1.set_path_effects([path_effects.Stroke(linewidth=3, foreground='black'),
 					   path_effects.Normal()])
 	text2.set_path_effects([path_effects.Stroke(linewidth=3, foreground='darkred'),
@@ -1031,7 +1032,7 @@ asymmetric_erroro = [[best_normalizedo-min_normalizedo], [max_normalizedo-best_n
 ax1.errorbar(xtickspoints-0.1, best_normalizedy, yerr=asymmetric_errory, fmt='o', color='k')
 ax1.errorbar(xtickspoints+0.1, best_normalizedo, yerr=asymmetric_erroro, fmt='o', color='r')
 
-ax1.set_xticks([xtickspoints-0.1,xtickspoints-0.1])
+ax1.set_xticks(numpy.ravel([xtickspoints-0.1,xtickspoints-0.1])) # 1D, as current matplotlib requires
 ax1.set_xlim(0.8,1.2)
 ax1.set_xticklabels('', rotation=90)
 fig.tight_layout()
@@ -1086,7 +1087,7 @@ ax1.scatter(xtickspoints+0.25,best_normalizedo,s=60,c='gold',marker='o',linewidt
 
 ax1.spines['right'].set_visible(False)
 ax1.spines['top'].set_visible(False)
-ax1.set_xticks([xtickspoints-0.25,xtickspoints+0.25])
+ax1.set_xticks(numpy.ravel([xtickspoints-0.25,xtickspoints+0.25])) # 1D, as current matplotlib requires
 ax1.set_xticklabels('', rotation=90)
 ax1.set_xlim(0.4,1.6)
 fig.tight_layout()

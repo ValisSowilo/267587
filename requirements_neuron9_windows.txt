@@ -1,0 +1,27 @@
+# Python packages for running this model on NEURON 9 under Windows (tested September 2026
+# with Windows 11, Python 3.13, the NEURON 9.0.2 installer and MS-MPI 10.1.1).
+#
+# There is no NEURON package on PyPI for Windows, and LFPy lists it as a dependency, so:
+#   1. Install NEURON 9.0.2 with the installer from github.com/neuronsimulator/nrn/releases
+#      and let it set PATH, PYTHONPATH and NEURONHOME. It includes the compiler used by
+#      nrnivmodl.
+#   2. Install Microsoft MPI (msmpisetup.exe) so that mpiexec and mpi4py work.
+#   3. In a new terminal:
+#        pip install -r requirements_neuron9_windows.txt
+#        pip install --no-deps LFPy==2.3.7
+#
+# Compile the mod files with nrnivmodl (it creates nrnmech.dll) and run the circuit with
+# mpiexec -n <ranks> python circuit.py <seed> 1
+LFPykit==0.6.2
+MEAutility==1.5.3
+Cython==3.3.0
+mpi4py==4.1.2
+numpy==2.5.3
+scipy==1.18.1
+pandas==3.0.6
+tables==3.11.1
+h5py==3.16.0
+matplotlib==3.11.2
+seaborn==0.13.2
+scikit-learn==1.9.1
+bootstrapped==0.0.2

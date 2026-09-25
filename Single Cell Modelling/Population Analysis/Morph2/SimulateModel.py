@@ -1,3 +1,4 @@
+# Modified 2026-09-24 by Valis Sowilo (github.com/ValisSowilo): fixed a bug in the original code (see CHANGES_NEURON9.md).
 ######### Relevent Links #########
 # https://nbviewer.jupyter.org/github/BlueBrain/SimulationTutorials/blob/master/FENS2016/ABI_model/single_cell_model.ipynb
 import time
@@ -21,7 +22,7 @@ TotalStartTime = time.time()
 
 ######### Load Morphology and Model Data #########
 cellname = 'PutativePN'
-morphname = 'HL5PN1.swc'
+morphname = 'HL5PN2.swc' # this folder's morphology (was HL5PN1.swc, which is not in this folder)
 
 morphology = ephys.morphologies.NrnFileMorphology(morphname, do_replace_axon=True)
 all_loc = ephys.locations.NrnSeclistLocation('all', seclist_name='all')

@@ -1,3 +1,4 @@
+# Modified 2026-09-24 by Valis Sowilo (github.com/ValisSowilo): fixed a bug in the original code (see CHANGES_NEURON9.md).
 import numpy
 import pickle
 import matplotlib
@@ -118,8 +119,8 @@ ax.scatter(bestrmp,bestsag,s=500,linewidths=2,edgecolors='k',color='darkgray', a
 for i2 in range(0,len(halloffame.__dict__['items'])):
 	sag = abs(halloffame.__dict__['items'][i2].__dict__['fitness'].__dict__['wvalues'][sagidx])
 	rmp = abs(halloffame.__dict__['items'][i2].__dict__['fitness'].__dict__['wvalues'][rmpidx])
-	text1 = ax.text(rmp,sag,str(i2+1),color='white',horizontalalignment='center',verticalalignment='center',fontsize=20)
-	text2 = ax.text(rmp,sag,str(i2+1),color='mistyrose',horizontalalignment='center',verticalalignment='center',fontsize=20)
+	text1 = ax.text(rmp,sag,str(i2+1),color='white',horizontalalignment='center',verticalalignment='center',fontsize=20,clip_on=True)
+	text2 = ax.text(rmp,sag,str(i2+1),color='mistyrose',horizontalalignment='center',verticalalignment='center',fontsize=20,clip_on=True)
 	text1.set_path_effects([path_effects.Stroke(linewidth=3, foreground='black'),
 					   path_effects.Normal()])
 	text2.set_path_effects([path_effects.Stroke(linewidth=3, foreground='darkred'),

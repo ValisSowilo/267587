@@ -1,3 +1,4 @@
+# Modified 2026-09-24 by Valis Sowilo (github.com/ValisSowilo): fixed a bug in the original code (see CHANGES_NEURON9.md).
 import time
 import numpy
 import matplotlib.pyplot as plt
@@ -71,7 +72,7 @@ text_file.write(hc)
 responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict, sim=nrn)
 
 # Align experimental voltage traces to the resting of the first trace
-if single_cell_data == True:
+if target_feature_type == 'Automatic':
 	for i in range(1,len(data)):
 		ind1 = numpy.where(data[0]['T'] == 270)
 		ind2 = numpy.where(data[i]['T'] == 270)
@@ -84,7 +85,7 @@ NumSomaRecs = numpy.sum([i=='soma' for i in RecLocs])
 def plot_responses(responses):
 	fig, axarr = plt.subplots(nrows=NumSomaRecs,ncols=1, sharex=True)
 	for i in range(0,NumSomaRecs):
-		if single_cell_data == True:
+		if target_feature_type == 'Automatic':
 			axarr[i].plot(data[i]['T'],data[i]['V'], color='b')
 		axarr[i].plot(responses['step'+str(StepNums[i])+'.soma.v']['time'], responses['step'+str(StepNums[i])+'.soma.v']['voltage'], color='r')
 		axarr[i].set_xlim(stimstart-200,stimend+200)

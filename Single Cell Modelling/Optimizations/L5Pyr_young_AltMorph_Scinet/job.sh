@@ -1,4 +1,5 @@
 #!/bin/bash --login
+# Modified 2026-09-24 by Valis Sowilo (github.com/ValisSowilo): create the IPython folder, which current IPython no longer does itself. See CHANGES_NEURON9.md.
 
 #SBATCH --nodes=10
 #SBATCH --ntasks-per-node=40
@@ -21,6 +22,7 @@ profile=${SLURM_JOB_ID}_$(hostname)
 unset DISPLAY
 
 echo "Starting job ${SLURM_JOB_ID}"
+mkdir -p $SCRATCH/.ipython # current IPython will not create this folder itself
 ipython profile create --parallel ${profile} --ipython-dir=$SCRATCH/.ipython
 
 echo "Launching controller"

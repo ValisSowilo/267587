@@ -1,0 +1,21 @@
+# Extra packages for the single-cell code (Single Cell Modelling/Optimizations and
+# Population Analysis). Install after requirements_neuron9.txt (Linux, macOS) or
+# requirements_neuron9_windows.txt (Windows):
+#
+#   pip install -r requirements_neuron9_singlecell.txt
+#   pip install --no-deps bluepyopt==1.14.25
+#
+# bluepyopt is installed with --no-deps because it lists NEURON as a dependency, which pip
+# cannot install on Windows; its other dependencies are listed below.
+#
+# ipfx is needed only for init_0populationfeatures_example.py in the Optimizations folders.
+# It requires pandas < 3 (through hdmf), so install it in a separate environment:
+#   pip install ipfx==2.1.2
+efel==5.7.34
+deap==1.4.4
+Pebble==5.2.2
+Jinja2==3.1.6
+pickleshare==0.7.5
+ipyparallel==9.2.0
+statsmodels==0.15.0
+adjustText==1.4.0

@@ -32,7 +32,53 @@ PSP Simulations/test_syn_Fig7.py
 - Network.simulate(electrode=) -> probes=; cell.ymid/zmid -> cell.y/z; np.trapz and DataFrame.append
   as above; the output folder is created if Circuit_output/ does not exist.
 
-New files: requirements_neuron9.txt, CHANGES_NEURON9.md, NEURON9_PORT_SHA256SUMS.txt, and a
+Population Analysis AnalyzeResults_FigS4top.py / AnalyzeResults_FigS4bottom.py
+- set_xticks([a, b]) with one-element arrays -> set_xticks(numpy.ravel([a, b])): current matplotlib
+  requires 1-D tick positions. The ticks are at the same places as before.
+
+Optimizations/L5Pyr_young_AltMorph_Scinet and L5Pyr_old_AltMorph_Scinet
+- init_5recordings.py: numpy.int (removed in numpy 1.24) -> int.
+- job.sh, job_debug.sh: create $SCRATCH/.ipython before "ipython profile create", which current
+  IPython no longer does itself.
+
+circuit.py (all three): ranks without cells
+- NEURON 9 aborts with "nrn_calc_fast_imem: Assertion `vec_sav_d' failed" on an MPI rank that owns
+  no cells, which happens when there are more ranks than cells (e.g. TESTING = True with more than
+  4 ranks). Such a rank now creates one unconnected placeholder section. It belongs to no
+  population and is not recorded, and ranks that own cells are unaffected.
+
+Bugs in the original code (not related to NEURON 9)
+- PSP Simulations/circuit.py: agegroup = 'o_rescue' referred to a model file that does not exist;
+  now 'y' (the options are 'y' and 'o').
+- Population Analysis/Morph2/SimulateModel.py loaded HL5PN1.swc, which is only in Morph1; it now
+  loads HL5PN2.swc, the morphology in its own folder.
+- out_1SimulateModel.py (Scinet folders) used an undefined variable, single_cell_data; it now
+  checks target_feature_type == 'Automatic', as init_8plot.py does.
+- out_2SimulateHocModel.py (Scinet folders) hard-coded the template name 'interneuron', but these
+  folders build 'pyramidal' cells; the name is now read from init_1morphology.py.
+- out_3AnalyzeResults.py (Scinet folders) and Population Analysis AnalyzeResults_FigS4*.py: the
+  numbered hall-of-fame labels in Quality_SagVsRMP are now drawn with clip_on=True. Before, a label
+  far outside the axes (a hall-of-fame model with a large RMP or sag error; Population Analysis fixes
+  the x axis at 0-0.9 SD) made savefig(..., bbox_inches='tight', dpi=300) enlarge the image to
+  include it, which could need many gigabytes of memory (11 GB in one test). Labels inside the axes
+  are unchanged: on normal data the saved figure is pixel-identical to before.
+  Note: out_3AnalyzeResults.py still needs at least one model within 2 SD on every feature (as after
+  a full optimization); with none it stops with an IndexError, as in the original.
+- The output folders that scripts write into (figs*, results, PLOTfiles, work,
+  highly_ranked_models, output_readout, ...) are now included as empty folders (with a .gitkeep
+  file), so a fresh copy runs without "No such file or directory" errors.
+
+## Installation
+
+- Linux: `pip install -r requirements_neuron9.txt`. macOS also has NEURON packages on PyPI and
+  should work the same way, but was not tested.
+- Windows: PyPI has no NEURON package for Windows, so NEURON comes from its installer and LFPy is
+  installed with --no-deps. The steps are at the top of requirements_neuron9_windows.txt.
+- Single-cell code (Optimizations, Population Analysis): also install
+  requirements_neuron9_singlecell.txt, as described at the top of that file.
+
+New files: requirements_neuron9.txt, requirements_neuron9_windows.txt,
+requirements_neuron9_singlecell.txt, CHANGES_NEURON9.md, NEURON9_PORT_SHA256SUMS.txt, and a
 NEURON 9 section in README.md.
 
 ## Validation (NEURON 9.0.2, LFPy 2.3.7, Python 3.12)
