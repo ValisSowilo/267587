@@ -13,6 +13,14 @@ import neuron
 from neuron import *
 import LFPy
 from LFPy import NetworkCell, Network, Synapse, RecExtElectrode, StimIntElectrode
+import sys
+if sys.platform == 'win32':
+	# On Windows, np.random.randint without a dtype returns 32-bit integers (a C long), so LFPy 2.3.7
+	# (Network.connect -> create_synapse) fails with "high is out of bounds for int32" when it draws
+	# synapse RNG seeds with np.random.randint(0, 2**32 - 1). Use 64-bit integers, as on Linux and
+	# macOS; this also gives the same random numbers, so a seed gives the same circuit on all systems.
+	_randint = np.random.randint
+	np.random.randint = lambda low, high=None, size=None, dtype=np.int64: _randint(low, high, size, dtype)
 from net_params import *
 from re import search
 from currents_visualization import plotCurrentscape
