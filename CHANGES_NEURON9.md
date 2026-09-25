@@ -47,13 +47,20 @@ circuit.py (all three): ranks without cells
   4 ranks). Such a rank now creates one unconnected placeholder section. It belongs to no
   population and is not recorded, and ranks that own cells are unaffected.
 
-Windows (circuit.py in all three folders, PSP Simulations/test_syn_Fig7.py)
-- On Windows, np.random.randint without a dtype returns 32-bit integers, so LFPy 2.3.7 fails in
-  Network.connect ("high is out of bounds for int32") when it seeds the stochastic synapses'
-  random number generators with np.random.randint(0, 2**32 - 1). On Windows only, these scripts
+Windows
+- circuit.py (all three) and PSP Simulations/test_syn_Fig7.py: on Windows, np.random.randint
+  without a dtype returns 32-bit integers, so LFPy 2.3.7 fails in Network.connect ("high is out
+  of bounds for int32") when it seeds the stochastic synapses' random number generators with
+  np.random.randint(0, 2**32 - 1). On Windows only, these scripts
   now make np.random.randint default to 64-bit integers, as on Linux and macOS. This also makes the
   random numbers the same as on Linux, so a seed gives the same connectivity (and, in the
   heterogeneous circuit, the same choice of cell models) on every system.
+- Single-cell scripts (Optimizations init_8plot.py, out_1SimulateModel.py and NSG/PV init_active.py;
+  Population Analysis SimulateModel.py): BluePyOpt runs each protocol in a separate process by
+  default. Windows starts such processes by re-running the main script, which fails for these
+  scripts (RuntimeError), so on Windows the protocols now run in-process
+  (protocol.run(..., isolate=sys.platform != 'win32')). On Linux and macOS nothing changes. The
+  optimization itself (evaluations on the ipyparallel engines) was not affected.
 - The "Mechanisms found" message also recognizes mod/nrnmech.dll (Windows) and mod/arm64/special
   (Apple silicon), instead of printing False there.
 

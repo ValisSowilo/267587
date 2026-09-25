@@ -69,7 +69,7 @@ text_file = open('work/template' + str(idx) + '.hoc', "w")
 text_file.write(hc)
 
 ##### Run model #####
-responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict, sim=nrn)
+responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 
 # Align experimental voltage traces to the resting of the first trace
 if target_feature_type == 'Automatic':

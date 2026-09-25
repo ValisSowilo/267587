@@ -1,3 +1,4 @@
+# Modified 2026-09-24 by Valis Sowilo (github.com/ValisSowilo): updated to run on Windows. See CHANGES_NEURON9.md.
 #################################
 ### Print and Plot Top Models ###
 #################################
@@ -103,7 +104,7 @@ def get_stdevs(simfeats):
 	
 	return num_stdevs
 
-responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict, sim=nrn)
+responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 plot_responses(responses)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces1.pdf', bbox_inches='tight',dpi=300,transparent=True)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces1.png', bbox_inches='tight',dpi=300,transparent=True)
@@ -133,7 +134,7 @@ sys.stdout.flush()
 pp.pprint(active_errs1)
 sys.stdout.flush()
 
-responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict2, sim=nrn)
+responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict2, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 plot_responses(responses)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces2.pdf', bbox_inches='tight',dpi=300,transparent=True)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces2.png', bbox_inches='tight',dpi=300,transparent=True)
@@ -163,7 +164,7 @@ sys.stdout.flush()
 pp.pprint(active_errs2)
 sys.stdout.flush()
 
-responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict3, sim=nrn)
+responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict3, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 plot_responses(responses)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces3.pdf', bbox_inches='tight',dpi=300,transparent=True)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces3.png', bbox_inches='tight',dpi=300,transparent=True)
@@ -193,7 +194,7 @@ sys.stdout.flush()
 pp.pprint(active_errs3)
 sys.stdout.flush()
 
-responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict4, sim=nrn)
+responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict4, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 plot_responses(responses)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces4.pdf', bbox_inches='tight',dpi=300,transparent=True)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces4.png', bbox_inches='tight',dpi=300,transparent=True)
@@ -223,7 +224,7 @@ sys.stdout.flush()
 pp.pprint(active_errs4)
 sys.stdout.flush()
 
-responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict5, sim=nrn)
+responses = recording_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict5, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 plot_responses(responses)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces5.pdf', bbox_inches='tight',dpi=300,transparent=True)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces5.png', bbox_inches='tight',dpi=300,transparent=True)

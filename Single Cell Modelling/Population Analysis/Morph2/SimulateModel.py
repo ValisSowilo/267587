@@ -1204,7 +1204,7 @@ def get_stdevs(data):
 	
 	return num_stdevs
 
-responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict, sim=nrn)
+responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 plot_responses_pas(responses)
 plt.savefig('PLOTfiles/' + dirpath1 + '_OptimizedTraces' + str(idx+1) + '_pas.pdf', bbox_inches='tight', dpi=300, transparent=True)
 plt.savefig('PLOTfiles/' + dirpath1 + '_OptimizedTraces' + str(idx+1) + '_pas.png', bbox_inches='tight', dpi=300, transparent=True)

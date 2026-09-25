@@ -1,3 +1,4 @@
+# Modified 2026-09-24 by Valis Sowilo (github.com/ValisSowilo): updated to run on Windows. See CHANGES_NEURON9.md.
 ######### Load Data for Active Optimization #########
 active_steps = [-0.4,-0.3,-0.2,-0.05,0.1,0.2,0.3] # nA
 data_active_dict = pickle.load(open("active.pkl","rb"))
@@ -1038,7 +1039,7 @@ def get_stdevs(data):
 	
 	return num_stdevs
 
-responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict, sim=nrn)
+responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 plot_responses_pas(responses)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces1_pas.pdf', bbox_inches='tight')
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces1_pas.png', bbox_inches='tight')
@@ -1116,7 +1117,7 @@ sys.stdout.flush()
 pp.pprint(active_errs1)
 sys.stdout.flush()
 
-responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict2, sim=nrn)
+responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict2, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 plot_responses_pas(responses)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces2_pas.pdf', bbox_inches='tight')
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces2_pas.png', bbox_inches='tight')
@@ -1194,7 +1195,7 @@ sys.stdout.flush()
 pp.pprint(active_errs2)
 sys.stdout.flush()
 
-responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict3, sim=nrn)
+responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict3, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 plot_responses_pas(responses)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces3_pas.pdf', bbox_inches='tight')
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces3_pas.png', bbox_inches='tight')
@@ -1272,7 +1273,7 @@ sys.stdout.flush()
 pp.pprint(active_errs3)
 sys.stdout.flush()
 
-responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict4, sim=nrn)
+responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict4, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 plot_responses_pas(responses)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces4_pas.pdf', bbox_inches='tight')
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces4_pas.png', bbox_inches='tight')
@@ -1350,7 +1351,7 @@ sys.stdout.flush()
 pp.pprint(active_errs4)
 sys.stdout.flush()
 
-responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict5, sim=nrn)
+responses = active_sevenstep_protocol.run(cell_model = Cell_Model, param_values=best_ind_dict5, sim=nrn, isolate=sys.platform != 'win32') # in-process on Windows, where multiprocessing re-runs this script
 plot_responses_pas(responses)
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces5_pas.pdf', bbox_inches='tight')
 plt.savefig('PLOTfiles/' + cellname + '_OptimizedTraces5_pas.png', bbox_inches='tight')
