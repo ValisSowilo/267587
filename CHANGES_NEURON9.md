@@ -107,8 +107,10 @@ Bugs in the original code (not related to NEURON 9)
   requirements_neuron9_singlecell.txt, as described at the top of that file.
 
 New files: requirements_neuron9.txt, requirements_neuron9_windows.txt,
-requirements_neuron9_singlecell.txt, CHANGES_NEURON9.md, NEURON9_PORT_SHA256SUMS.txt, and a
-NEURON 9 section in README.md.
+requirements_neuron9_singlecell.txt, CHANGES_NEURON9.md, NEURON9_PORT_SHA256SUMS.txt,
+.gitattributes, and a NEURON 9 section in README.md. .gitattributes turns off git's line-ending
+conversion, so a clone on Windows has the same bytes as on Linux (Git for Windows otherwise
+converts to CRLF, which breaks the checksums and the SLURM job.sh scripts).
 
 ## Validation (NEURON 9.0.2, LFPy 2.3.7, Python 3.12)
 

@@ -1,0 +1,4 @@
+# Check out every file exactly as committed, on every system. Without this, Git for Windows
+# (core.autocrlf=true by default) converts line endings on checkout, which breaks the checksums in
+# NEURON9_PORT_SHA256SUMS.txt and the SLURM job.sh scripts. The repository has both LF and CRLF files.
+* -text

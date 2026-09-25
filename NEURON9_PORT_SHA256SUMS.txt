@@ -1,6 +1,7 @@
 # SHA-256 checksums of the files changed or added by the NEURON 9 port (Valis Sowilo, github.com/ValisSowilo, 2026-09-24).
 # Check with: sha256sum -c NEURON9_PORT_SHA256SUMS.txt
-147f62dfb6522a9b47a36a8c1bb2c020ca2a6d644403086f43627baab6bf6bee  CHANGES_NEURON9.md
+83ac33c7d37d31bd60f8996ebd7bfd9f4c006c4a14bc414f2faf12fd9c84b800  .gitattributes
+292c56a67ad57e226790f078d17fd5298899054fb2471d07b2a4f6d4cdecdded  CHANGES_NEURON9.md
 0b9ff8377092085ecfa182ca14a190a14b8398ae87486922975446e58cc13526  L5Circuit Analyses/Plot_Fig3CG.py
 b7f330c32801cc0d6c3c81e57a380042c05986eda49c9b81e82ffdb9cf50f432  L5Circuit Analyses/Plot_Fig3E_RateDistributions.py
 90b1cf0588c8bc63e3144a6b8505f37304349d0ac88c3007ae7c0e799f4c6b2f  L5Circuit Analyses/Plot_Fig3F_rescues.py
