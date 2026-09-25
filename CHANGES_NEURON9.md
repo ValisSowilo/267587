@@ -1,13 +1,15 @@
 # NEURON 9 port
 
 The NEURON 9 port of this model (ModelDB #267587, Guet-McCreight et al. 2022) was made by
-**Valis Sowilo** ([github.com/ValisSowilo](https://github.com/ValisSowilo)), September 2026.
+**Valis Sowilo** ([github.com/ValisSowilo](https://github.com/ValisSowilo)), 24-25 September 2026.
 The model itself, its parameters and the original code are by the authors listed in README.md.
 
 - Based on: ModelDB #267587 as published at github.com/ModelDBRepository/267587 (commit 82cdd91)
 - Source of this port: github.com/ValisSowilo/267587
-- License: GPL-3.0, like the original (see LICENSE). Every file changed by the port carries a
-  "Modified 2026-09-24 by Valis Sowilo" notice, as section 5(a) of the license requires.
+- License: GPL-3.0, like the original (see LICENSE); the port is distributed under the same
+  license. Every file changed by the port carries a "Modified 2026-09-24 by Valis Sowilo" notice
+  (the date the port was started; the later changes of 2026-09-25 are listed below), as section
+  5(a) of the license requires.
 - NEURON9_PORT_SHA256SUMS.txt lists SHA-256 checksums of every file changed or added by the
   port, so a copy can be checked against this release with `sha256sum -c NEURON9_PORT_SHA256SUMS.txt`.
 
